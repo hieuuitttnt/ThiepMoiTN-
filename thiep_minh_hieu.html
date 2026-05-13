@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Mời Tốt Nghiệp – Nguyễn Minh Hiếu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #f0d98a;
+      --gold-dim: #c9a84c66;
+      --navy: #0d1b3e;
+      --text-main: #e8dcc8;
+      --blue-light: #a0c4e8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #070e22;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 80px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #c9a84c44 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 70%, #c9a84c33 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 15%, #c9a84c44 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 50%, #c9a84c22 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, #c9a84c33 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 45% 40%, #c9a84c55 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 90%, #c9a84c22 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 525px;
+    }
+
+    .page-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #c9a84c33;
+      border: 1px solid var(--gold-dim);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav-dot.active {
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .card {
+      width: 100%;
+      aspect-ratio: 148 / 210;
+      background: var(--navy);
+      border: 1px solid var(--gold-dim);
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px #c9a84c11, inset 0 0 60px rgba(13,27,62,0.5);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image:
+        linear-gradient(var(--gold) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 70%; height: 70%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #c9a84c07 0%, transparent 70%);
+      left: 15%; top: 15%;
+      pointer-events: none;
+    }
+
+    .frame-outer { position: absolute; inset: 14px; border: 0.5px solid #c9a84c55; pointer-events: none; z-index: 2; }
+    .frame-inner { position: absolute; inset: 19px; border: 0.3px solid #c9a84c1a; pointer-events: none; z-index: 2; }
+
+    .corner-ornament { position: absolute; width: 36px; height: 36px; z-index: 3; pointer-events: none; }
+    .corner-ornament.tl { top: 14px; left: 14px; }
+    .corner-ornament.tr { top: 14px; right: 14px; transform: scaleX(-1); }
+    .corner-ornament.bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
+    .corner-ornament.br { bottom: 14px; right: 14px; transform: scale(-1); }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 1;
+    }
+    .page.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+    .page.exit   { opacity: 0; transform: translateX(-40px); }
+
+    .gold-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+
+    /* ── PAGE 1 ── */
+    #page1 { align-items: center; justify-content: center; padding: 44px 28px; gap: 11px; text-align: center; }
+
+    .badge { border: 0.5px solid var(--gold-dim); padding: 5px 18px; font-size: 7px; font-weight: 600; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
+    .ornament-row { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--gold); font-size: 10px; opacity: 0.55; }
+    .ceremony-label { font-family: 'Cormorant Garamond', serif; font-size: 10px; font-weight: 400; letter-spacing: 2px; color: #d4b896; text-transform: uppercase; }
+    .main-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 7vw, 34px); font-weight: 700; color: var(--gold-light); line-height: 1.1; }
+    .main-title em { font-style: italic; font-weight: 400; font-size: 0.82em; color: var(--gold); display: block; }
+    .ai-icon svg { opacity: 0.72; }
+    .degree-sub { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; color: var(--blue-light); }
+    .name-display { font-family: 'Playfair Display', serif; font-size: clamp(20px, 5.5vw, 26px); font-weight: 600; font-style: italic; color: #fff; letter-spacing: 1px; }
+    .year-tag { border: 0.5px solid var(--gold-dim); background: #c9a84c0f; padding: 5px 22px; font-size: 8px; font-weight: 600; letter-spacing: 5px; color: var(--gold-light); }
+    .school-small { font-size: 7px; font-weight: 600; letter-spacing: 1px; color: #c9a84ccc; text-transform: uppercase; line-height: 2; }
+
+    /* ── PAGE 2 ── */
+    #page2 { padding: 38px 28px 28px; gap: 10px; }
+
+    .section-label { font-size: 7px; font-weight: 600; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; text-align: center; }
+    .honoree-block { text-align: center; }
+    .honoree-pre { font-family: 'Cormorant Garamond', serif; font-size: 10px; font-style: italic; color: #d4b896; }
+    .honoree-name { font-family: 'Playfair Display', serif; font-size: clamp(18px, 5vw, 22px); font-weight: 600; color: var(--gold-light); margin: 2px 0; }
+    .honoree-dept { font-family: 'Cormorant Garamond', serif; font-size: 10px; font-style: italic; color: var(--blue-light); }
+
+    .info-grid { border: 0.5px solid #c9a84c2a; flex: 1; display: flex; flex-direction: column; }
+    .info-row { display: flex; align-items: stretch; border-bottom: 0.3px solid #c9a84c18; flex: 1; }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon { width: 36px; background: #c9a84c08; border-right: 0.3px solid #c9a84c18; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .info-icon svg { opacity: 0.8; }
+    .info-body { flex: 1; padding: 7px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+    .info-lbl { font-size: 7px; font-weight: 600; letter-spacing: 1.5px; color: #c9a84cbb; text-transform: uppercase; }
+    .info-val { font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 500; color: var(--text-main); line-height: 1.4; }
+
+    .quote-line { font-family: 'Cormorant Garamond', serif; font-size: 11px; font-style: italic; color: #a8c8e8; text-align: center; line-height: 1.7; border-left: 1.5px solid #c9a84c88; padding-left: 10px; margin: 0 18px; }
+
+    /* ── PAGE 3 ── */
+    #page3 { align-items: center; justify-content: center; padding: 28px; gap: 10px; text-align: center; }
+
+    /* SEAL — width % + viewBox tâm 50,50 để chữ luôn căn giữa */
+    .seal-ring {
+      width: 22%;
+      min-width: 80px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1.5px solid #c9a84caa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .seal-ring::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      border: 0.8px dashed #c9a84c66;
+    }
+
+    .rsvp-label { font-size: 7px; font-weight: 600; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+    .p3-body { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 300; color: #d4b896; line-height: 2; }
+
+    .contact-box { background: #c9a84c0c; border: 0.5px solid #c9a84c44; padding: 14px 24px; width: 100%; text-align: center; }
+    .contact-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--gold-light); }
+    .contact-details { font-size: 9px; color: var(--blue-light); line-height: 2.1; margin-top: 6px; }
+    .contact-deadline { font-size: 8px; color: #c9a84cbb; margin-top: 5px; }
+    .thanks { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; color: #d4b896; }
+
+    /* ── PAGE 4 ── */
+    #page4 { padding: 32px 22px 20px; gap: 8px; }
+
+    .map-header { text-align: center; }
+    .map-title-small { font-size: 7px; font-weight: 600; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
+    .map-title-big { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--gold-light); margin-top: 2px; }
+
+    .campus-map { flex: 1; position: relative; background: #0e2a14; border-radius: 4px; overflow: hidden; }
+
+    .map-note { background: #c9a84c0d; border: 0.5px solid #c9a84c44; border-radius: 2px; padding: 7px 10px; }
+    .map-note-title { font-size: 8px; color: var(--gold-light); font-weight: 600; margin-bottom: 2px; }
+    .map-note-body { font-size: 7.5px; color: var(--blue-light); line-height: 1.8; }
+    .map-footer { display: flex; justify-content: space-between; border-top: 0.5px solid #c9a84c44; padding-top: 6px; font-size: 8px; color: #c9a84ccc; }
+
+    /* ── NAV ── */
+    .nav-buttons { display: flex; align-items: center; gap: 16px; margin-top: 18px; justify-content: center; }
+    .btn-nav { background: transparent; border: 0.5px solid var(--gold-dim); color: var(--gold); font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 9px 20px; cursor: pointer; transition: all 0.25s; outline: none; }
+    .btn-nav:hover { background: #c9a84c15; border-color: var(--gold); box-shadow: 0 0 12px #c9a84c22; }
+    .btn-nav:disabled { opacity: 0.2; cursor: default; box-shadow: none; }
+    .page-counter { font-size: 9px; font-weight: 500; letter-spacing: 2px; color: #c9a84c66; min-width: 50px; text-align: center; }
+
+    .btn-music { position: fixed; bottom: 20px; right: 20px; width: 38px; height: 38px; border-radius: 50%; background: #c9a84c22; border: 1px solid #c9a84c66; color: #c9a84c; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 999; transition: all 0.25s; }
+    .btn-music.muted { opacity: 0.4; }
+  </style>
+</head>
+
+<body>
+  <audio id="bgm" src="nhac.mp3" loop></audio>
+
+  <div class="card-wrapper">
+    <div class="page-nav">
+      <div class="nav-dot active" onclick="goTo(0)"></div>
+      <div class="nav-dot" onclick="goTo(1)"></div>
+      <div class="nav-dot" onclick="goTo(2)"></div>
+      <div class="nav-dot" onclick="goTo(3)"></div>
+    </div>
+
+    <div class="card">
+      <div class="frame-outer"></div>
+      <div class="frame-inner"></div>
+      <svg class="corner-ornament tl" viewBox="0 0 36 36" fill="none"><path d="M2 2L2 18M2 2L18 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M6 6L6 12M6 6L12 6" stroke="#c9a84c" stroke-width="0.6" opacity="0.45"/><circle cx="2" cy="2" r="1.5" fill="#c9a84c"/></svg>
+      <svg class="corner-ornament tr" viewBox="0 0 36 36" fill="none"><path d="M2 2L2 18M2 2L18 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M6 6L6 12M6 6L12 6" stroke="#c9a84c" stroke-width="0.6" opacity="0.45"/><circle cx="2" cy="2" r="1.5" fill="#c9a84c"/></svg>
+      <svg class="corner-ornament bl" viewBox="0 0 36 36" fill="none"><path d="M2 2L2 18M2 2L18 2" stroke="#c9a84c" stroke-width="1.5"/><circle cx="2" cy="2" r="1.5" fill="#c9a84c"/></svg>
+      <svg class="corner-ornament br" viewBox="0 0 36 36" fill="none"><path d="M2 2L2 18M2 2L18 2" stroke="#c9a84c" stroke-width="1.5"/><circle cx="2" cy="2" r="1.5" fill="#c9a84c"/></svg>
+
+      <!-- PAGE 1 — BÌA -->
+      <div class="page active" id="page1">
+        <div class="badge">Trân trọng kính mời</div>
+        <div class="ornament-row"><span>·</span><span>·</span><span style="font-size:13px;opacity:0.9">✦</span><span>·</span><span>·</span></div>
+        <div class="ceremony-label">Lễ Tốt Nghiệp Cử Nhân</div>
+        <div class="main-title">Trí Tuệ<br><em>Nhân Tạo</em></div>
+        <div class="ai-icon">
+          <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+            <circle cx="21" cy="21" r="19" stroke="#c9a84c" stroke-width="0.7" stroke-dasharray="3 3"/>
+            <circle cx="21" cy="21" r="11" stroke="#c9a84c" stroke-width="0.9"/>
+            <path d="M21 6v4M21 32v4M6 21h4M32 21h4" stroke="#c9a84c" stroke-width="1.1" stroke-linecap="round"/>
+            <rect x="16" y="16" width="10" height="10" rx="1.5" stroke="#c9a84c" stroke-width="0.9" fill="none"/>
+            <path d="M18 21h6M21 18v6" stroke="#c9a84c" stroke-width="0.7" stroke-linecap="round"/>
+            <circle cx="21" cy="21" r="1.5" fill="#c9a84c"/>
+          </svg>
+        </div>
+        <div class="degree-sub">Artificial Intelligence · KHNT2022</div>
+        <div class="gold-line" style="width:70%"></div>
+        <div class="name-display">Nguyễn Minh Hiếu</div>
+        <div class="year-tag">2026</div>
+        <div class="school-small">Trường Đại Học Công Nghệ Thông Tin<br>Đại Học Quốc Gia TP. Hồ Chí Minh</div>
+        <div class="ornament-row" style="margin-top:2px"><span>·</span><span style="font-size:11px;opacity:0.8">✦</span><span>·</span></div>
+      </div>
+
+      <!-- PAGE 2 — THÔNG TIN -->
+      <div class="page" id="page2">
+        <div class="section-label">Thông Tin Buổi Lễ</div>
+        <div class="gold-line" style="width:50px;margin:0 auto"></div>
+        <div class="honoree-block">
+          <div class="honoree-pre">Kính mời quý vị tham dự lễ tốt nghiệp của</div>
+          <div class="honoree-name">Nguyễn Minh Hiếu</div>
+          <div class="honoree-dept">Cử nhân Trí Tuệ Nhân Tạo · Khoa KHMT</div>
+        </div>
+        <div class="gold-line" style="width:90%"></div>
+        <div class="info-grid">
+          <div class="info-row">
+            <div class="info-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#c9a84c" stroke-width="1.1"><rect x="1" y="2" width="13" height="11.5" rx="1.5"/><path d="M4 1v2.5M11 1v2.5M1 6h13"/></svg></div>
+            <div class="info-body"><div class="info-lbl">Ngày tổ chức</div><div class="info-val">Thứ Ba, 9 tháng 6 năm 2026</div></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#c9a84c" stroke-width="1.1"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 4v3.5L10 9"/></svg></div>
+            <div class="info-body"><div class="info-lbl">Lịch trình</div><div class="info-val">8:00–11:00 Lễ chính thức · 11:30 Tiệc mừng</div></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#c9a84c" stroke-width="1.1"><path d="M7.5 1.5C5 1.5 2.5 3.8 2.5 6.5C2.5 10.5 7.5 13.5 7.5 13.5S12.5 10.5 12.5 6.5C12.5 3.8 10 1.5 7.5 1.5Z"/><circle cx="7.5" cy="6.5" r="2"/></svg></div>
+            <div class="info-body"><div class="info-lbl">Địa điểm</div><div class="info-val">Tòa A — Trường ĐH Công Nghệ Thông Tin<br>Khu phố 6, Linh Trung, TP. Thủ Đức</div></div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#c9a84c" stroke-width="1.1"><rect x="1" y="2.5" width="13" height="10" rx="1.5"/><path d="M2.5 5L7.5 8.5L12.5 5"/></svg></div>
+            <div class="info-body"><div class="info-lbl">Đơn vị tổ chức</div><div class="info-val">Khoa Khoa học Máy tính · UIT – ĐHQG HCM</div></div>
+          </div>
+        </div>
+        <div class="quote-line">"Mỗi dòng code là một bước chân —<br>tốt nghiệp là khởi đầu của hành trình dài nhất."</div>
+        <div style="font-size:8px;font-weight:600;letter-spacing:1.5px;color:#c9a84ccc;text-transform:uppercase;text-align:center;">Trang phục · Lịch sự &amp; Trang trọng</div>
+      </div>
+
+      <!-- PAGE 3 — RSVP -->
+      <div class="page" id="page3">
+        <!-- SEAL: SVG dùng viewBox="0 0 100 100", tất cả tọa độ tính từ tâm x=50 -->
+        <div class="seal-ring">
+          <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
+            <text x="50" y="38" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" fill="#c9a84c" font-weight="700">TỐT NGHIỆP</text>
+            <text x="50" y="55" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" fill="#c9a84c" font-style="italic">Cử Nhân</text>
+            <text x="50" y="70" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="10" fill="#c9a84caa" font-weight="600" letter-spacing="2">2026</text>
+            <path d="M20 50 Q50 30 80 50" stroke="#c9a84c" stroke-width="0.7" fill="none" opacity="0.35"/>
+          </svg>
+        </div>
+
+        <div class="rsvp-label">Xác nhận tham dự</div>
+        <div class="gold-line" style="width:50px"></div>
+        <div class="p3-body">Sự hiện diện của Quý vị<br>là niềm vinh dự lớn lao<br>trên hành trình khởi đầu mới.</div>
+        <div class="gold-line" style="width:85%"></div>
+        <div class="contact-box">
+          <div class="contact-name">Nguyễn Minh Hiếu</div>
+          <div class="contact-details">📱 &nbsp;0379 175 265<br>✉️ &nbsp;hieu0984422690@gmail.com<br>🌐 &nbsp;uit.edu.vn/totnghiep2026</div>
+          <div class="contact-deadline">Xác nhận trước ngày 08 / 06 / 2026</div>
+        </div>
+        <div class="thanks">Trân trọng cảm ơn Quý vị!</div>
+        <div style="color:var(--gold);font-size:12px;opacity:0.5">· ✦ ·</div>
+        <div style="font-size:8px;font-weight:600;letter-spacing:2px;color:#c9a84caa;text-transform:uppercase;">Artificial Intelligence · KHNT2022</div>
+      </div>
+
+      <!-- PAGE 4 — BẢN ĐỒ -->
+      <div class="page" id="page4">
+        <div class="map-header">
+          <div class="map-title-small">Hướng dẫn đến địa điểm</div>
+          <div class="map-title-big">Bản Đồ UIT</div>
+          <div class="gold-line" style="width:50px;margin:4px auto"></div>
+        </div>
+        <div class="campus-map" id="map-container">
+          <img id="map-img" src="" alt="Bản đồ UIT" style="width:100%;height:100%;object-fit:contain;object-position:center;display:none;border-radius:4px;">
+          <div id="map-placeholder" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;border:1.5px dashed #c9a84c55;border-radius:4px;" onclick="document.getElementById('file-input').click()">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" opacity="0.5">
+              <rect x="3" y="6" width="30" height="24" rx="3" stroke="#c9a84c" stroke-width="1.5"/>
+              <circle cx="12" cy="14" r="3" stroke="#c9a84c" stroke-width="1.2"/>
+              <path d="M3 24l8-7 6 6 5-4 9 7" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+            </svg>
+            <span style="font-size:9px;color:#c9a84c88;letter-spacing:1px;text-align:center;line-height:1.8;">Bấm để chọn ảnh bản đồ<br><span style="font-size:7px;color:#c9a84c44;">(PNG / JPG)</span></span>
+          </div>
+          <input type="file" id="file-input" accept="image/*" style="display:none" onchange="loadMapImage(event)">
+        </div>
+        <div class="map-note">
+          <div class="map-note-title">📍 Lễ tại <span style="color:#f07030;">Tòa A</span> — Sau đó sẽ di chuyển</div>
+          <div class="map-note-body">Hiếu sẽ cập nhật vị trí liên tục trên note nhóm mess.<br>Không tìm thấy thì aloo nhaa! 😊</div>
+        </div>
+        <div class="map-footer">
+          <span>📱 0379 175 265</span>
+          <span style="letter-spacing:1px;text-transform:uppercase;font-size:8px;color:#c9a84ccc">UIT · CS 2026</span>
+          <span>✉️ hieu0984422690</span>
+        </div>
+      </div>
+
+    </div><!-- end .card -->
+
+    <div class="nav-buttons">
+      <button class="btn-nav" id="btn-prev" onclick="prev()" disabled>◀ Trước</button>
+      <span class="page-counter" id="counter">1 / 4</span>
+      <button class="btn-nav" id="btn-next" onclick="next()">Tiếp ▶</button>
+    </div>
+  </div>
+
+  <button class="btn-music" id="btn-music">🎵</button>
+
+  <script>
+    const pages    = document.querySelectorAll('.page');
+    const dots     = document.querySelectorAll('.nav-dot');
+    const counter  = document.getElementById('counter');
+    const btnPrev  = document.getElementById('btn-prev');
+    const btnNext  = document.getElementById('btn-next');
+    const bgm      = document.getElementById('bgm');
+    const btnMusic = document.getElementById('btn-music');
+    let current = 0;
+
+    function goTo(idx) {
+      if (idx === current) return;
+      pages[current].classList.remove('active');
+      pages[current].classList.add('exit');
+      setTimeout(() => pages[current].classList.remove('exit'), 500);
+      current = idx;
+      pages[current].classList.add('active');
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      counter.textContent = (current + 1) + ' / ' + pages.length;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === pages.length - 1;
+    }
+
+    function next() {
+      if (current < pages.length - 1) {
+        if (bgm.paused) bgm.play().catch(() => {});
+        goTo(current + 1);
+      }
+    }
+    function prev() { if (current > 0) goTo(current - 1); }
+
+    let startX = 0;
+    document.querySelector('.card').addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
+    document.querySelector('.card').addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) dx < 0 ? next() : prev();
+    }, {passive:true});
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft')  prev();
+    });
+
+    document.addEventListener('click', () => {
+      if (bgm.paused) bgm.play().catch(() => {});
+    }, { once: true });
+
+    btnMusic.addEventListener('click', e => {
+      e.stopPropagation();
+      if (bgm.paused) {
+        bgm.play();
+        btnMusic.textContent = '🎵';
+        btnMusic.classList.remove('muted');
+      } else {
+        bgm.pause();
+        btnMusic.textContent = '🔇';
+        btnMusic.classList.add('muted');
+      }
+    });
+
+    window.loadMapImage = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.getElementById('map-img');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        document.getElementById('map-placeholder').style.display = 'none';
+        try { localStorage.setItem('uit-map-img', e.target.result); } catch(e) {}
+      };
+      reader.readAsDataURL(file);
+    };
+
+    try {
+      const saved = localStorage.getItem('uit-map-img');
+      if (saved) {
+        document.getElementById('map-img').src = saved;
+        document.getElementById('map-img').style.display = 'block';
+        document.getElementById('map-placeholder').style.display = 'none';
+      }
+    } catch(e) {}
+  </script>
+</body>
+</html>
